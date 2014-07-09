@@ -17,5 +17,6 @@
     "tests"
   ],
   "dependencies": {
+    "js-sorting": "~1.2.0"
   }
 }

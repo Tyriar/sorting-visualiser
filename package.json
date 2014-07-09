@@ -12,7 +12,7 @@
   "keywords": [
     "algorithm",
     "computer science",
-    "sorting",
+    "sorting"
   ],
   "author": "Daniel Imms (http://www.growingwiththeweb.com)",
   "license": "MIT",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-jasmine-node-coverage": "^0.1.11",
-    "jasmine-node": "~1.14.3",
+    "jasmine-node": "^1.14.3",
     "jasmine-reporters": ">=0.2.0 <2.0.0"
   }
 }
