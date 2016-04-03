@@ -5,9 +5,11 @@
 
 var SortAction = require('./sort-action');
 var SortPane = require('./sort-pane');
-var sorts = require('./sort-definitions');
+var sortAlgorithms = require('./sort-algorithms');
 
 var ARRAY_SIZE = 20;
+
+var sortPanes = [];
 
 function initEventListeners() {
   document.querySelector('#play-all').addEventListener('click', playAll);
@@ -32,29 +34,39 @@ function generateRandomArray() {
 }
 
 function playAll() {
-  sorts.forEach(function (sort) {
-    sort.pane.play();
+  sortPanes.forEach(function (pane) {
+    pane.play();
   });
 }
 
 function shuffleArray() {
   var array = generateRandomArray();
-  sorts.forEach(function (sort) {
-    sort.pane.setArray(array);
+  sortPanes.forEach(function (pane) {
+    pane.setArray(array);
   });
 }
 
 function sortInReverseToggled() {
-  sorts.forEach(function (sort) {
-    sort.pane.toggleSortDirection();
+  sortPanes.forEach(function (pane) {
+    pane.toggleSortDirection();
   });
 }
 
 function init() {
   var initialArray = generateRandomArray();
-  sorts.forEach(function (sort) {
+  var sortingVisualisers = document.querySelectorAll('.sorting-visualiser');
+  for (var i = 0; i < sortingVisualisers.length; i++) {
+    var element = sortingVisualisers[i];
+    var algorithmName = element.getAttribute('data-algorithm');
+    var algorithm = sortAlgorithms[algorithmName];
+    element.id = 'sorting-visualiser-' + algorithmName;
+    sortPanes.push(new SortPane(element, algorithm, initialArray));
+  };
+
+
+  /*sorts.forEach(function (sort) {
     sort.pane = new SortPane(sort, initialArray);
-  });
+  });*/
   initEventListeners();
 }
 

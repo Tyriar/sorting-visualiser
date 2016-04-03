@@ -15,9 +15,9 @@ var COMPARE_COLOR = '#e0544c';
 var SWAP_SPEED = 50;
 var SHUFFLE_SPEED = 100;
 
-function SortPane(sortDefinition, array) {
-  this.algorithm = sortDefinition.algorithm;
-  this.snap = Snap(sortDefinition.svg);
+function SortPane(svgElement, algorithm, array) {
+  this.algorithm = algorithm;
+  this.snap = Snap(svgElement);
   this.array = array.slice();
 
   this.sortInReverse = false;
@@ -64,6 +64,9 @@ SortPane.prototype.stop = function () {
 };
 
 SortPane.prototype.play = function () {
+  if (this.isSorting) {
+    return;
+  }
   this.isSorting = true;
   var customCompare = undefined;
   if (this.sortInReverse) {
