@@ -9,54 +9,86 @@ var oddEvenSort = require('js-sorting/lib/odd-even-sort');
 var quicksort = require('js-sorting/lib/quicksort');
 var selectionSort = require('js-sorting/lib/selection-sort');
 
-var s = Snap('#svg');
+var ARRAY_SIZE = 20;
 
-// Create dummy data
-var data = [];
-for (var i = 1; i <= 20; i++) {
-  data.push(i);
-}
-
-// Shuffle
-for (var j = 0; j < 100; j++) {
-  var a = Math.floor(Math.random() * 20);
-  var b = Math.floor(Math.random() * 20);
-  if (a !== b) {
-    var temp = data[a];
-    data[a] = data[b];
-    data[b] = temp;
+var sorts = [
+  {
+    algorithm: bubbleSort,
+    svg: '#bubble-sort-svg'
+  },
+  {
+    algorithm: cocktailSort,
+    svg: '#cocktail-sort-svg'
+  },
+  {
+    algorithm: combSort,
+    svg: '#comb-sort-svg'
   }
+]
+
+runSort(sorts[0]);
+runSort(sorts[1]);
+runSort(sorts[2]);
+
+function generateRandomArray() {
+  var array = [];
+  for (var i = 1; i <= ARRAY_SIZE; i++) {
+    array.push(i);
+  }
+  for (var i = 0; i < array.length; i++) {
+    var j = Math.floor(Math.random() * ARRAY_SIZE);
+    if (i !== j) {
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  }
+  return array;
 }
 
-// Create data rectangles
+function runSort(sortDefinition) {
+  var snap = Snap(sortDefinition.svg);
 
-function generateElementRectangles(array) {
+  // Create dummy data
+  var data = generateRandomArray();
+
+  // Create data rectangles
+  var dataRects = generateElementRectangles(snap, data);
+  var sortActions = sort(data, dataRects, sortDefinition.algorithm);
+  function finishedPlayback() {
+
+  }
+  playSortActions(sortActions, dataRects, finishedPlayback);
+}
+
+
+
+function generateElementRectangles(snap, array) {
   var rects = [];
   for (var i = 0; i < array.length; i++) {
-    var x = 10 + i * 12; // 10 + 2 padding
+    var x = 5 + i * 12; // 10 + 2 padding
     var width = 10;
-    var height = array[i] * 5;
-    var y = 200 - height;
-    var rect = s.rect(x, y, width, height);
+    var height = array[i] * 6;
+    var y = 125 - height;
+    var rect = snap.rect(x, y, width, height);
     rects.push(rect);
   }
   return rects
 }
-var dataRects = generateElementRectangles(data);
 
-function sort(customCompare) {
+function sort(data, dataRects, algorithm, customCompare) {
   var sortActions = [];
-  bubbleSort.attachSwapObserver(function (array, a, b) {
-    sortActions.push(new SortAction(a, b, 'swap'));
-  });
-  bubbleSort.attachCompareObserver(function (data, a, b) {
+  algorithm.attachCompareObserver(function (data, a, b) {
     sortActions.push(new SortAction(a, b, 'compare'));
   });
-
-  var originalList = data;
-  var finalData = bubbleSort(data, customCompare);
+  algorithm.attachSwapObserver(function (array, a, b) {
+    sortActions.push(new SortAction(a, b, 'swap'));
+  });
+  algorithm(data, customCompare);
+  algorithm.detachCompareObserver();
+  algorithm.detachSwapObserver();
   // Run sortActions over dataRects
-  playSortActions(sortActions, dataRects);
+  return sortActions;
 }
 
 function SortAction(a, b, type) {
@@ -65,9 +97,10 @@ function SortAction(a, b, type) {
   this.type = type;
 }
 
-function playSortActions(sortActions, dataRects) {
+function playSortActions(sortActions, dataRects, cb) {
   var SPEED = 20;
   if (sortActions.length === 0) {
+    cb();
     return;
   }
   var action = sortActions.shift();
@@ -103,12 +136,10 @@ function playSortActions(sortActions, dataRects) {
         fill: "#1e1e38"
       });
     }
-    playSortActions(sortActions, dataRects);
+    playSortActions(sortActions, dataRects, cb);
   }, SPEED * 2);
 }
 
 function reverseCompare(a, b) {
   return b - a;
 }
-
-sort();

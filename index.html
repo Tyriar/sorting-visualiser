@@ -3,12 +3,43 @@
 <head>
   <meta charset="utf-8">
   <title>Sorting Visualiser - Growing with the Web</title>
+  <link href="css/main.css" rel="stylesheet"/>
 </head>
 <body>
-  <h1>Sorting Visualiser</h1>
-    
-  <h2>Bubble sort</h2>
-  <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="480" width="640"></svg>
+  <ul class="sort-list">
+    <li class="bubble-sort">
+      <h2>Bubble sort</h2>
+      <svg id="bubble-sort-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+    <li class="cocktail-sort">
+      <h2>Cocktail sort</h2>
+      <svg id="cocktail-sort-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+    <li class="comb-sort">
+      <h2>Comb sort</h2>
+      <svg id="comb-sort-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+    <li class="gnome-sort">
+      <h2>Gnome sort</h2>
+      <svg id="gnome-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+    <li class="heapsort">
+      <h2>Heapsort</h2>
+      <svg id="heapsort-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+    <li class="odd-even-sort">
+      <h2>Odd-even sort</h2>
+      <svg id="odd-even-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+    <li class="quicksort">
+      <h2>Quicksort sort</h2>
+      <svg id="quicksort-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+    <li class="selection-sort">
+      <h2>Selection sort</h2>
+      <svg id="selection-sort-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
+    </li>
+  </ul>
   <script src="bower_components/Snap.svg/dist/snap.svg-min.js"></script>
   <script src="dist/bundle.js"></script>
 </body>
