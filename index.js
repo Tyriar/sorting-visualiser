@@ -3,9 +3,9 @@
  */
 'use strict';
 
-var SortAction = require('./sort-action');
-var SortPane = require('./sort-pane');
-var sortAlgorithms = require('./sort-algorithms');
+var SortAction = require('./src/sort-action');
+var SortPane = require('./src/sort-pane');
+var sortAlgorithms = require('./src/sort-algorithms');
 
 var ARRAY_SIZE = 20;
 

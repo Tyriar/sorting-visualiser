@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var sortingVisualiser = require('../src');
+var sortingVisualiser = require('../');
 
 var sortPanes;
 
