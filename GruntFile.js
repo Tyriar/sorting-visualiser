@@ -16,27 +16,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-vulcanize');
-  grunt.config('vulcanize', {
-    dist: {
-      options: {
-        strip: true,
-        inline: true
-      },
-      files: {
-        'dist.html': 'index.html'
-      }
-    },
-    dev: {
-      options: {
-        inline: true
-      },
-      files: {
-        'dist.html': 'index.html'
-      }
-    }
-  });
-
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.config('copy', {
     dist: {
@@ -83,13 +62,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('dist', [
     'uglify:dist',
-    'vulcanize:dist',
     'copy:dist',
     'clean:dist'
   ]);
 
   grunt.registerTask('dev', [
-    'vulcanize:dev',
     'copy:dist',
     'copy:dev',
     'clean:dist'

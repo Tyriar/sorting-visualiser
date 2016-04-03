@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "test": "jasmine-node ."
+    "test": "jasmine-node .",
+    "serve": "webpack-dev-server --progress --colors"
   },
   "repository": {
     "type": "git",
@@ -26,8 +27,11 @@
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-uglify": "^0.5.0",
     "grunt-jasmine-node-coverage": "^0.1.11",
-    "grunt-vulcanize": "^0.3.0",
     "jasmine-node": "^1.14.3",
-    "jasmine-reporters": ">=0.2.0 <2.0.0"
+    "jasmine-reporters": ">=0.2.0 <2.0.0",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "js-sorting": "^3.0.1"
   }
 }
