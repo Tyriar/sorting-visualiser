@@ -1,3 +1,6 @@
+/**
+ * @license MIT Copyright 2016 Daniel Imms (http://www.growingwiththeweb.com)
+ */
 'use strict';
 
 var bubbleSort = require('js-sorting/lib/bubble-sort');
@@ -8,6 +11,9 @@ var heapsort = require('js-sorting/lib/heapsort');
 var oddEvenSort = require('js-sorting/lib/odd-even-sort');
 var quicksort = require('js-sorting/lib/quicksort');
 var selectionSort = require('js-sorting/lib/selection-sort');
+
+var SortAction = require('./sort-action');
+var SortPane = require('./sort-pane');
 
 var ARRAY_SIZE = 20;
 
@@ -26,9 +32,18 @@ var sorts = [
   }
 ]
 
-runSort(sorts[0]);
-runSort(sorts[1]);
-runSort(sorts[2]);
+function init() {
+  //sorts.forEach(runSort);
+  var initialArray = generateRandomArray();
+  sorts.forEach(function (sort) {
+    sort.pane = new SortPane(sort, initialArray);
+  });
+  sorts.forEach(function (sort) {
+    sort.pane.play();
+  });
+}
+
+init();
 
 function generateRandomArray() {
   var array = [];
@@ -45,6 +60,8 @@ function generateRandomArray() {
   }
   return array;
 }
+
+
 
 function runSort(sortDefinition) {
   var snap = Snap(sortDefinition.svg);
@@ -79,22 +96,16 @@ function generateElementRectangles(snap, array) {
 function sort(data, dataRects, algorithm, customCompare) {
   var sortActions = [];
   algorithm.attachCompareObserver(function (data, a, b) {
-    sortActions.push(new SortAction(a, b, 'compare'));
+    sortActions.push(new SortAction(a, b, SortAction.COMPARE));
   });
   algorithm.attachSwapObserver(function (array, a, b) {
-    sortActions.push(new SortAction(a, b, 'swap'));
+    sortActions.push(new SortAction(a, b, SortAction.SWAP));
   });
   algorithm(data, customCompare);
   algorithm.detachCompareObserver();
   algorithm.detachSwapObserver();
   // Run sortActions over dataRects
   return sortActions;
-}
-
-function SortAction(a, b, type) {
-  this.a = a;
-  this.b = b;
-  this.type = type;
 }
 
 function playSortActions(sortActions, dataRects, cb) {
@@ -104,7 +115,7 @@ function playSortActions(sortActions, dataRects, cb) {
     return;
   }
   var action = sortActions.shift();
-  if (action.type === 'swap') {
+  if (action.isSwapAction()) {
     // Animate x values
     var temp = dataRects[action.a].getBBox().x;
     dataRects[action.a].animate({
@@ -118,7 +129,7 @@ function playSortActions(sortActions, dataRects, cb) {
     dataRects[action.a] = dataRects[action.b];
     dataRects[action.b] = temp;
   }
-  if (action.type === 'compare') {
+  if (action.isCompareAction()) {
     dataRects[action.a].attr({
       fill: "#e0544c"
     });
@@ -128,7 +139,7 @@ function playSortActions(sortActions, dataRects, cb) {
   }
 
   setTimeout(function () {
-    if (action.type === 'compare') {
+    if (action.isCompareAction()) {
       dataRects[action.a].attr({
         fill: "#1e1e38"
       });
