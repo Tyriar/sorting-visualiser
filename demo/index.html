@@ -3,7 +3,16 @@
 <head>
   <meta charset="utf-8">
   <title>Sorting Visualiser - Growing with the Web</title>
-  <link href="css/main.css" rel="stylesheet"/>
+  <style>
+    .sort-list {
+      list-style: none;
+      padding: 0;
+    }
+    .sort-list li {
+      width: 250px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <button id="play-all">Play all</button>
@@ -44,7 +53,7 @@
       <svg id="selection-sort-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" height="130" width="250"></svg>
     </li>
   </ul>
-  <script src="bower_components/Snap.svg/dist/snap.svg-min.js"></script>
-  <script src="dist/bundle.js"></script>
+  <script src="../bower_components/Snap.svg/dist/snap.svg-min.js"></script>
+  <script src="../dist/bundle.js"></script>
 </body>
 </html>

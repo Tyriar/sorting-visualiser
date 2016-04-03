@@ -5,6 +5,11 @@
 
 var SortAction = require('./sort-action');
 
+var BAR_WIDTH = 10;
+var BAR_MAX_HEIGHT = 125;
+var BAR_VALUE_HEIGHT_INCREMENET = 6;
+var BAR_HORIZONTAL_PADDING = 2;
+var BAR_LEFT_PADDING = 5;
 var BAR_COLOR = '#1e1e38';
 var COMPARE_COLOR = '#e0544c';
 var SWAP_SPEED = 50;
@@ -15,6 +20,7 @@ function SortPane(sortDefinition, array) {
   this.snap = Snap(sortDefinition.svg);
   this.array = array.slice();
 
+  this.sortInReverse = false;
   this.isSorting = false;
 
   this.createBars();
@@ -23,45 +29,55 @@ function SortPane(sortDefinition, array) {
 SortPane.prototype.setArray = function (array) {
   this.array = array.slice();
   this.redrawArray();
-}
+};
 
 SortPane.prototype.redrawArray = function () {
   this.stop();
   for (var i = 0; i < this.bars.length; i++) {
-    var newHeight = this.array[i] * 6;
+    var newHeight = this.array[i] * BAR_VALUE_HEIGHT_INCREMENET;
     this.bars[i].animate({
       height: newHeight,
-      y: 125 - newHeight
+      y: BAR_MAX_HEIGHT - newHeight
     }, SHUFFLE_SPEED);
   }
-}
+};
 
 SortPane.prototype.createBars = function () {
   this.bars = [];
   for (var i = 0; i < this.array.length; i++) {
-    var x = 5 + i * 12; // 10 + 2 padding
-    var width = 10;
-    var height = this.array[i] * 6;
-    var y = 125 - height;
+    var x = BAR_LEFT_PADDING + i * (BAR_WIDTH + BAR_HORIZONTAL_PADDING);
+    var width = BAR_WIDTH;
+    var height = this.array[i] * BAR_VALUE_HEIGHT_INCREMENET;
+    var y = BAR_MAX_HEIGHT - height;
     var bar = this.snap.rect(x, y, width, height);
     bar.attr('fill', BAR_COLOR);
     this.bars.push(bar);
   }
-}
+};
+
+SortPane.prototype.toggleSortDirection = function () {
+  this.sortInReverse = !this.sortInReverse;
+};
 
 SortPane.prototype.stop = function () {
   this.isSorting = false;
-}
+};
 
 SortPane.prototype.play = function () {
   this.isSorting = true;
-  var sortActions = sort(this.array, this.algorithm);
+  var customCompare = undefined;
+  if (this.sortInReverse) {
+    customCompare = function (a, b) {
+      return b - a;
+    };
+  }
+  var sortActions = sort(this.array, this.algorithm, customCompare);
   this.playSortActions(sortActions, this.bars);
 };
 
 SortPane.prototype.onplayfinished = function () {
   this.isSorting = false;
-}
+};
 
 SortPane.prototype.playSortActions = function (sortActions) {
   if (!this.isSorting) {
@@ -108,7 +124,7 @@ SortPane.prototype.playSortActions = function (sortActions) {
   setTimeout(function () {
     that.playSortActions(sortActions);
   }, SWAP_SPEED * 2);
-}
+};
 
 function sort(array, algorithm, customCompare) {
   var sortActions = [];

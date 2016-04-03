@@ -12,7 +12,7 @@ var ARRAY_SIZE = 20;
 function initEventListeners() {
   document.querySelector('#play-all').addEventListener('click', playAll);
   document.querySelector('#shuffle-array').addEventListener('click', shuffleArray);
-  document.querySelector('#sort-in-reverse').addEventListener('click', reverseSortToggled);
+  document.querySelector('#sort-in-reverse').addEventListener('click', sortInReverseToggled);
 }
 
 function generateRandomArray() {
@@ -44,8 +44,10 @@ function shuffleArray() {
   });
 }
 
-function reverseSortToggled() {
-
+function sortInReverseToggled() {
+  sorts.forEach(function (sort) {
+    sort.pane.toggleSortDirection();
+  });
 }
 
 function init() {
