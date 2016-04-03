@@ -5,6 +5,9 @@
 
 var SortAction = require('./sort-action');
 
+var BAR_COLOR = '#1e1e38';
+var COMPARE_COLOR = '#e0544c';
+
 function SortPane(sortDefinition, array) {
   this.algorithm = sortDefinition.algorithm;
   this.snap = Snap(sortDefinition.svg);
@@ -30,74 +33,79 @@ SortPane.prototype.createBars = function () {
     var height = this.array[i] * 6;
     var y = 125 - height;
     var bar = this.snap.rect(x, y, width, height);
+    bar.attr('fill', BAR_COLOR);
     this.bars.push(bar);
   }
 }
 
 SortPane.prototype.play = function () {
-  var sortActions = sort(this.array, this.bars, this.algorithm);
+  var sortActions = sort(this.array, this.algorithm);
   function finishedPlayback() {
 
   }
-  playSortActions(sortActions, this.bars, finishedPlayback);
+  this.playSortActions(sortActions, this.bars, finishedPlayback);
 };
 
-function sort(data, dataRects, algorithm, customCompare) {
-  var sortActions = [];
-  algorithm.attachCompareObserver(function (data, a, b) {
-    sortActions.push(new SortAction(a, b, SortAction.COMPARE));
-  });
-  algorithm.attachSwapObserver(function (array, a, b) {
-    sortActions.push(new SortAction(a, b, SortAction.SWAP));
-  });
-  algorithm(data, customCompare);
-  algorithm.detachCompareObserver();
-  algorithm.detachSwapObserver();
-  // Run sortActions over dataRects
-  return sortActions;
+SortPane.prototype.onplayfinished = function () {
+
 }
 
-function playSortActions(sortActions, dataRects, cb) {
+SortPane.prototype.playSortActions = function (sortActions) {
   var SPEED = 20;
   if (sortActions.length === 0) {
-    cb();
+    this.onplayfinished();
     return;
   }
   var action = sortActions.shift();
   if (action.isSwapAction()) {
     // Animate x values
-    var temp = dataRects[action.a].getBBox().x;
-    dataRects[action.a].animate({
-      x: dataRects[action.b].getBBox().x
+    var temp = this.bars[action.a].getBBox().x;
+    this.bars[action.a].animate({
+      x: this.bars[action.b].getBBox().x
     }, SPEED);
-    dataRects[action.b].animate({
+    this.bars[action.b].animate({
       x: temp
     }, SPEED);
     // Swap indexes
-    temp = dataRects[action.a];
-    dataRects[action.a] = dataRects[action.b];
-    dataRects[action.b] = temp;
+    temp = this.bars[action.a];
+    this.bars[action.a] = this.bars[action.b];
+    this.bars[action.b] = temp;
   }
   if (action.isCompareAction()) {
-    dataRects[action.a].attr({
-      fill: "#e0544c"
+    this.bars[action.a].attr({
+      fill: COMPARE_COLOR
     });
-    dataRects[action.b].attr({
-      fill: "#e0544c"
+    this.bars[action.b].attr({
+      fill: COMPARE_COLOR
     });
   }
 
+  var self = this;
   setTimeout(function () {
     if (action.isCompareAction()) {
-      dataRects[action.a].attr({
-        fill: "#1e1e38"
+      self.bars[action.a].attr({
+        fill: BAR_COLOR
       });
-      dataRects[action.b].attr({
-        fill: "#1e1e38"
+      self.bars[action.b].attr({
+        fill: BAR_COLOR
       });
     }
-    playSortActions(sortActions, dataRects, cb);
+    self.playSortActions(sortActions, this.bars);
   }, SPEED * 2);
+}
+
+function sort(array, algorithm, customCompare) {
+  var sortActions = [];
+  algorithm.attachCompareObserver(function (array, a, b) {
+    sortActions.push(new SortAction(a, b, SortAction.COMPARE));
+  });
+  algorithm.attachSwapObserver(function (array, a, b) {
+    sortActions.push(new SortAction(a, b, SortAction.SWAP));
+  });
+  algorithm(array, customCompare);
+  algorithm.detachCompareObserver();
+  algorithm.detachSwapObserver();
+  return sortActions;
 }
 
 module.exports = SortPane;

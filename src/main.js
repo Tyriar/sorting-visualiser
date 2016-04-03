@@ -3,34 +3,11 @@
  */
 'use strict';
 
-var bubbleSort = require('js-sorting/lib/bubble-sort');
-var cocktailSort = require('js-sorting/lib/cocktail-sort');
-var combSort = require('js-sorting/lib/comb-sort');
-var gnomeSort = require('js-sorting/lib/gnome-sort');
-var heapsort = require('js-sorting/lib/heapsort');
-var oddEvenSort = require('js-sorting/lib/odd-even-sort');
-var quicksort = require('js-sorting/lib/quicksort');
-var selectionSort = require('js-sorting/lib/selection-sort');
-
 var SortAction = require('./sort-action');
 var SortPane = require('./sort-pane');
+var sorts = require('./sort-definitions');
 
 var ARRAY_SIZE = 20;
-
-var sorts = [
-  {
-    algorithm: bubbleSort,
-    svg: '#bubble-sort-svg'
-  },
-  {
-    algorithm: cocktailSort,
-    svg: '#cocktail-sort-svg'
-  },
-  {
-    algorithm: combSort,
-    svg: '#comb-sort-svg'
-  }
-]
 
 function init() {
   //sorts.forEach(runSort);
@@ -38,10 +15,9 @@ function init() {
   sorts.forEach(function (sort) {
     sort.pane = new SortPane(sort, initialArray);
   });
-  sorts.forEach(function (sort) {
-    sort.pane.play();
-  });
 }
+
+document.querySelector('#play-all').addEventListener('click', playAll);
 
 init();
 
@@ -59,6 +35,12 @@ function generateRandomArray() {
     }
   }
   return array;
+}
+
+function playAll() {
+  sorts.forEach(function (sort) {
+    sort.pane.play();
+  });
 }
 
 
