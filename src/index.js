@@ -11,12 +11,6 @@ var ARRAY_SIZE = 20;
 
 var sortPanes = [];
 
-function initEventListeners() {
-  document.querySelector('#play-all').addEventListener('click', playAll);
-  document.querySelector('#shuffle-array').addEventListener('click', shuffleArray);
-  document.querySelector('#sort-in-reverse').addEventListener('click', sortInReverseToggled);
-}
-
 function generateRandomArray() {
   var array = [];
   for (var i = 1; i <= ARRAY_SIZE; i++) {
@@ -33,25 +27,6 @@ function generateRandomArray() {
   return array;
 }
 
-function playAll() {
-  sortPanes.forEach(function (pane) {
-    pane.play();
-  });
-}
-
-function shuffleArray() {
-  var array = generateRandomArray();
-  sortPanes.forEach(function (pane) {
-    pane.setArray(array);
-  });
-}
-
-function sortInReverseToggled() {
-  sortPanes.forEach(function (pane) {
-    pane.toggleSortDirection();
-  });
-}
-
 function init() {
   var initialArray = generateRandomArray();
   var sortingVisualisers = document.querySelectorAll('.sorting-visualiser');
@@ -62,12 +37,7 @@ function init() {
     element.id = 'sorting-visualiser-' + algorithmName;
     sortPanes.push(new SortPane(element, algorithm, initialArray));
   };
-
-
-  /*sorts.forEach(function (sort) {
-    sort.pane = new SortPane(sort, initialArray);
-  });*/
-  initEventListeners();
+  return sortPanes;
 }
 
-init();
+module.exports = init;
