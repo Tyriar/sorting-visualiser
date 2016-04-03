@@ -7,7 +7,7 @@ var SortAction = require('./sort-action');
 
 var BAR_COLOR = '#1e1e38';
 var COMPARE_COLOR = '#e0544c';
-var SWAP_SPEED = 20;
+var SWAP_SPEED = 50;
 var SHUFFLE_SPEED = 100;
 
 function SortPane(sortDefinition, array) {
@@ -72,6 +72,7 @@ SortPane.prototype.playSortActions = function (sortActions) {
     this.onplayfinished();
     return;
   }
+  var that = this;
   var action = sortActions.shift();
   if (action.isSwapAction()) {
     // Animate x values
@@ -94,19 +95,18 @@ SortPane.prototype.playSortActions = function (sortActions) {
     this.bars[action.b].attr({
       fill: COMPARE_COLOR
     });
+    setTimeout(function () {
+      that.bars[action.a].animate({
+        fill: BAR_COLOR
+      }, SWAP_SPEED);
+      that.bars[action.b].animate({
+        fill: BAR_COLOR
+      }, SWAP_SPEED);
+    }, SWAP_SPEED);
   }
 
-  var that = this;
   setTimeout(function () {
-    if (action.isCompareAction()) {
-      that.bars[action.a].attr({
-        fill: BAR_COLOR
-      });
-      that.bars[action.b].attr({
-        fill: BAR_COLOR
-      });
-    }
-    that.playSortActions(sortActions, this.bars);
+    that.playSortActions(sortActions);
   }, SWAP_SPEED * 2);
 }
 
