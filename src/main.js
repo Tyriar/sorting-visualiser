@@ -11,6 +11,8 @@ var ARRAY_SIZE = 20;
 
 function initEventListeners() {
   document.querySelector('#play-all').addEventListener('click', playAll);
+  document.querySelector('#shuffle-array').addEventListener('click', shuffleArray);
+  document.querySelector('#sort-in-reverse').addEventListener('click', reverseSortToggled);
 }
 
 function generateRandomArray() {
@@ -33,6 +35,17 @@ function playAll() {
   sorts.forEach(function (sort) {
     sort.pane.play();
   });
+}
+
+function shuffleArray() {
+  var array = generateRandomArray();
+  sorts.forEach(function (sort) {
+    sort.pane.setArray(array);
+  });
+}
+
+function reverseSortToggled() {
+
 }
 
 function init() {

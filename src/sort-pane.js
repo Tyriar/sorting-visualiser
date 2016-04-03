@@ -7,22 +7,33 @@ var SortAction = require('./sort-action');
 
 var BAR_COLOR = '#1e1e38';
 var COMPARE_COLOR = '#e0544c';
+var SWAP_SPEED = 20;
+var SHUFFLE_SPEED = 100;
 
 function SortPane(sortDefinition, array) {
   this.algorithm = sortDefinition.algorithm;
   this.snap = Snap(sortDefinition.svg);
   this.array = array.slice();
 
+  this.isSorting = false;
+
   this.createBars();
 }
 
 SortPane.prototype.setArray = function (array) {
-  this.array = array;
+  this.array = array.slice();
   this.redrawArray();
 }
 
 SortPane.prototype.redrawArray = function () {
-  // TOOD: Impl
+  this.stop();
+  for (var i = 0; i < this.bars.length; i++) {
+    var newHeight = this.array[i] * 6;
+    this.bars[i].animate({
+      height: newHeight,
+      y: 125 - newHeight
+    }, SHUFFLE_SPEED);
+  }
 }
 
 SortPane.prototype.createBars = function () {
@@ -38,20 +49,25 @@ SortPane.prototype.createBars = function () {
   }
 }
 
-SortPane.prototype.play = function () {
-  var sortActions = sort(this.array, this.algorithm);
-  function finishedPlayback() {
+SortPane.prototype.stop = function () {
+  this.isSorting = false;
+}
 
-  }
-  this.playSortActions(sortActions, this.bars, finishedPlayback);
+SortPane.prototype.play = function () {
+  this.isSorting = true;
+  var sortActions = sort(this.array, this.algorithm);
+  this.playSortActions(sortActions, this.bars);
 };
 
 SortPane.prototype.onplayfinished = function () {
-
+  this.isSorting = false;
 }
 
 SortPane.prototype.playSortActions = function (sortActions) {
-  var SPEED = 20;
+  if (!this.isSorting) {
+    // Playback was stopped
+    return;
+  }
   if (sortActions.length === 0) {
     this.onplayfinished();
     return;
@@ -62,10 +78,10 @@ SortPane.prototype.playSortActions = function (sortActions) {
     var temp = this.bars[action.a].getBBox().x;
     this.bars[action.a].animate({
       x: this.bars[action.b].getBBox().x
-    }, SPEED);
+    }, SWAP_SPEED);
     this.bars[action.b].animate({
       x: temp
-    }, SPEED);
+    }, SWAP_SPEED);
     // Swap indexes
     temp = this.bars[action.a];
     this.bars[action.a] = this.bars[action.b];
@@ -80,18 +96,18 @@ SortPane.prototype.playSortActions = function (sortActions) {
     });
   }
 
-  var self = this;
+  var that = this;
   setTimeout(function () {
     if (action.isCompareAction()) {
-      self.bars[action.a].attr({
+      that.bars[action.a].attr({
         fill: BAR_COLOR
       });
-      self.bars[action.b].attr({
+      that.bars[action.b].attr({
         fill: BAR_COLOR
       });
     }
-    self.playSortActions(sortActions, this.bars);
-  }, SPEED * 2);
+    that.playSortActions(sortActions, this.bars);
+  }, SWAP_SPEED * 2);
 }
 
 function sort(array, algorithm, customCompare) {
