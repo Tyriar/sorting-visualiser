@@ -8,32 +8,13 @@ var sortingVisualiser = require('../');
 var sortPanes;
 
 function initEventListeners() {
-  document.querySelector('#play-all').addEventListener('click', playAll);
-  document.querySelector('#shuffle-array').addEventListener('click', shuffleArray);
-  document.querySelector('#sort-in-reverse').addEventListener('click', sortInReverseToggled);
-}
-
-function playAll() {
-  sortPanes.forEach(function (pane) {
-    pane.play();
-  });
-}
-
-function shuffleArray() {
-  var array = generateRandomArray();
-  sortPanes.forEach(function (pane) {
-    pane.setArray(array);
-  });
-}
-
-function sortInReverseToggled() {
-  sortPanes.forEach(function (pane) {
-    pane.toggleSortDirection();
-  });
+  document.querySelector('#play-all').addEventListener('click', sortingVisualiser.playAll);
+  document.querySelector('#shuffle-array').addEventListener('click', sortingVisualiser.shuffleArray);
+  document.querySelector('#sort-in-reverse').addEventListener('click', sortingVisualiser.sortInReverseToggled);
 }
 
 function init() {
-  sortPanes = sortingVisualiser();
+  sortingVisualiser.init();
   initEventListeners();
 }
 

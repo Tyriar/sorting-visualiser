@@ -27,6 +27,25 @@ function generateRandomArray() {
   return array;
 }
 
+function playAll() {
+  sortPanes.forEach(function (pane) {
+    pane.play();
+  });
+}
+
+function shuffleArray() {
+  var array = generateRandomArray();
+  sortPanes.forEach(function (pane) {
+    pane.setArray(array);
+  });
+}
+
+function sortInReverseToggled() {
+  sortPanes.forEach(function (pane) {
+    pane.toggleSortDirection();
+  });
+}
+
 function init() {
   var initialArray = generateRandomArray();
   var sortingVisualisers = document.querySelectorAll('.sorting-visualiser');
@@ -37,7 +56,11 @@ function init() {
     element.id = 'sorting-visualiser-' + algorithmName;
     sortPanes.push(new SortPane(element, algorithm, initialArray));
   };
-  return sortPanes;
 }
 
-module.exports = init;
+module.exports = {
+  init: init,
+  playAll: playAll,
+  shuffleArray: shuffleArray,
+  sortInReverseToggled: sortInReverseToggled
+};
