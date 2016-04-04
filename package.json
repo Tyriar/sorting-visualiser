@@ -5,7 +5,8 @@
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "serve": "webpack-dev-server --progress --colors",
-    "test": "xo && nyc ava"
+    "test": "xo && nyc ava",
+    "watch": "webpack --progress --colors --watch"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "ava": "*",
     "coveralls": "^2.11.9",
     "nyc": "^6.1.1",
+    "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1",
     "xo": "*"
   },
