@@ -1,22 +1,12 @@
+sudo: false
 language: node_js
-
 node_js:
-  - "0.11"
-  - "0.10"
-
-addons:
-  code_climate:
-    repo_token: 14c14eb008749d9a33c48528518d3b49a976ac1991ef1f34c93fb93c78ae1af3
+  - 'stable'
+  - '4'
 
 before_install:
-  - npm install -g grunt-cli
   - npm install -g bower
-  - npm install -g codeclimate-test-reporter
 
 install:
   - npm install
   - bower install
-
-after_script:
-  - grunt coverage
-  - cat coverage/lcov.info | codeclimate
