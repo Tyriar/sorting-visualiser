@@ -120,6 +120,9 @@ SortPane.prototype.restart = function () {
     }, SWAP_SPEED);
     return;
   }
+  if (this.currentSortActionIndex !== 0) {
+    this.redrawArray();
+  }
   this.performSort();
   this.isSorting = true;
   setTimeout(this.playSortActions.bind(this, false), SHUFFLE_SPEED);
