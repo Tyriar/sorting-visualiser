@@ -1,8 +1,7 @@
 # sorting-visualiser
 
-[![Build Status](http://img.shields.io/travis/Tyriar/sorting-visualiser.svg?style=flat)](https://travis-ci.org/Tyriar/sorting-visualiser)
-[![Code Climate](http://img.shields.io/codeclimate/github/Tyriar/sorting-visualiser.svg?style=flat)](https://codeclimate.com/github/Tyriar/sorting-visualiser)
-[![Test Coverage](http://img.shields.io/codeclimate/coverage/github/Tyriar/sorting-visualiser.svg?style=flat)](https://codeclimate.com/github/Tyriar/sorting-visualiser)
+[![Build Status](https://travis-ci.org/Tyriar/sorting-visualiser.svg?branch=master)](https://travis-ci.org/Tyriar/sorting-visualiser)
+[![Coverage Status](https://coveralls.io/repos/github/Tyriar/sorting-visualiser/badge.svg?branch=master)](https://coveralls.io/github/Tyriar/sorting-visualiser?branch=master)
 
 ## Dependencies
 
