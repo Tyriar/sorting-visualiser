@@ -39,9 +39,9 @@ function pause() {
   });
 }
 
-function resume() {
+function restart() {
   sortPanes.forEach(function (pane) {
-    pane.resume();
+    pane.restart();
   });
 }
 
@@ -85,8 +85,8 @@ function init() {
 module.exports = {
   init: init,
   play: play,
+  restart: restart,
   pause: pause,
-  resume: resume,
   stepBack: stepBack,
   stepForward: stepForward,
   shuffleArray: shuffleArray,

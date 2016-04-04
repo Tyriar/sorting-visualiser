@@ -24,16 +24,7 @@ function SortPane(svgElement, algorithm, array) {
   this.isSorting = false;
 
   this.createBars();
-
-  var customCompare = undefined;
-  if (this.sortInReverse) {
-    customCompare = function (a, b) {
-      return b - a;
-    };
-  }
-  // Clone the array do the original is retained
-  this.sortActions = sort(array.slice(), this.algorithm, customCompare);
-  this.currentSortActionIndex = 0;
+  this.performSort();
 }
 
 SortPane.prototype.setArray = function (array) {
@@ -41,8 +32,20 @@ SortPane.prototype.setArray = function (array) {
   this.redrawArray();
 };
 
+SortPane.prototype.performSort = function () {
+  var customCompare = undefined;
+  if (this.sortInReverse) {
+    customCompare = function (a, b) {
+      return b - a;
+    };
+  }
+  // Clone the array do the original is retained
+  this.sortActions = sort(this.array.slice(), this.algorithm, customCompare);
+  this.currentSortActionIndex = 0;
+};
+
 SortPane.prototype.redrawArray = function () {
-  this.stop();
+  this.pause();
   for (var i = 0; i < this.bars.length; i++) {
     var newHeight = this.array[i] * BAR_VALUE_HEIGHT_INCREMENET;
     this.bars[i].animate({
@@ -69,21 +72,8 @@ SortPane.prototype.toggleSortDirection = function () {
   this.sortInReverse = !this.sortInReverse;
 };
 
-SortPane.prototype.stop = function () {
-  this.isSorting = false;
-  // TODO: Differentiate from pause, restart data set?
-};
-
 SortPane.prototype.pause = function () {
   this.isSorting = false;
-};
-
-SortPane.prototype.resume = function () {
-  if (this.isSorting) {
-    return;
-  }
-  this.isSorting = true;
-  this.playSortActions(false);
 };
 
 SortPane.prototype.stepForward = function () {
@@ -108,22 +98,30 @@ SortPane.prototype.stepBack = function () {
 
 SortPane.prototype.play = function () {
   if (this.isSorting) {
+    return;
+  }
+  this.isSorting = true;
+  this.playSortActions(false);
+};
+
+SortPane.prototype.restart = function () {
+  if (this.isSorting) {
     // Wait for action to finish, this could be improved by retaining a queue of
     // current actions and/or firing an event when everything is finished
     this.isSorting = false;
     var that = this;
     setTimeout(function () {
-      if (this.currentSortActionIndex !== 0) {
+      if (that.currentSortActionIndex !== 0) {
         that.redrawArray();
       }
+      that.performSort();
       that.isSorting = true;
-      that.currentSortActionIndex = 0;
       setTimeout(that.playSortActions.bind(that, false), SHUFFLE_SPEED);
     }, SWAP_SPEED);
     return;
   }
+  this.performSort();
   this.isSorting = true;
-  this.currentSortActionIndex = 0;
   setTimeout(this.playSortActions.bind(this, false), SHUFFLE_SPEED);
 };
 
