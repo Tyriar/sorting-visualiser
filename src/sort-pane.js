@@ -24,6 +24,16 @@ function SortPane(svgElement, algorithm, array) {
   this.isSorting = false;
 
   this.createBars();
+
+  var customCompare = undefined;
+  if (this.sortInReverse) {
+    customCompare = function (a, b) {
+      return b - a;
+    };
+  }
+  // Clone the array do the original is retained
+  this.sortActions = sort(array.slice(), this.algorithm, customCompare);
+  this.currentSortActionIndex = 0;
 }
 
 SortPane.prototype.setArray = function (array) {
@@ -61,38 +71,86 @@ SortPane.prototype.toggleSortDirection = function () {
 
 SortPane.prototype.stop = function () {
   this.isSorting = false;
+  // TODO: Differentiate from pause, restart data set?
 };
 
-SortPane.prototype.play = function () {
+SortPane.prototype.pause = function () {
+  this.isSorting = false;
+};
+
+SortPane.prototype.resume = function () {
   if (this.isSorting) {
     return;
   }
   this.isSorting = true;
-  var customCompare = undefined;
-  if (this.sortInReverse) {
-    customCompare = function (a, b) {
-      return b - a;
-    };
+  this.playSortActions(false);
+};
+
+SortPane.prototype.stepForward = function () {
+  if (this.isSorting) {
+    return;
   }
-  var sortActions = sort(this.array, this.algorithm, customCompare);
-  this.playSortActions(sortActions, this.bars);
+  this.isSorting = true;
+  this.playSortActions(true);
+  this.isSorting = false;
+};
+
+SortPane.prototype.stepBack = function () {
+  if (this.isSorting) {
+    return;
+  }
+  if (this.currentSortActionIndex === 0) {
+    // Cannot go back
+    return;
+  }
+  this.playSortAction(this.sortActions[--this.currentSortActionIndex]);
+};
+
+SortPane.prototype.play = function () {
+  if (this.isSorting) {
+    // Wait for action to finish, this could be improved by retaining a queue of
+    // current actions and/or firing an event when everything is finished
+    this.isSorting = false;
+    var that = this;
+    setTimeout(function () {
+      if (this.currentSortActionIndex !== 0) {
+        that.redrawArray();
+      }
+      that.isSorting = true;
+      that.currentSortActionIndex = 0;
+      setTimeout(that.playSortActions.bind(that, false), SHUFFLE_SPEED);
+    }, SWAP_SPEED);
+    return;
+  }
+  this.isSorting = true;
+  this.currentSortActionIndex = 0;
+  setTimeout(this.playSortActions.bind(this, false), SHUFFLE_SPEED);
 };
 
 SortPane.prototype.onplayfinished = function () {
   this.isSorting = false;
 };
 
-SortPane.prototype.playSortActions = function (sortActions) {
+SortPane.prototype.playSortActions = function (stepOnlyOnce) {
   if (!this.isSorting) {
     // Playback was stopped
     return;
   }
-  if (sortActions.length === 0) {
+  if (this.currentSortActionIndex >= this.sortActions.length) {
     this.onplayfinished();
     return;
   }
   var that = this;
-  var action = sortActions.shift();
+  this.playSortAction(this.sortActions[this.currentSortActionIndex++]);
+
+  if (!stepOnlyOnce) {
+    setTimeout(function () {
+      that.playSortActions();
+    }, SWAP_SPEED * 2);
+  }
+};
+
+SortPane.prototype.playSortAction = function (action) {
   if (action.isSwapAction()) {
     // Animate x values
     var temp = this.bars[action.a].getBBox().x;
@@ -108,26 +166,18 @@ SortPane.prototype.playSortActions = function (sortActions) {
     this.bars[action.b] = temp;
   }
   if (action.isCompareAction()) {
-    this.bars[action.a].attr({
-      fill: COMPARE_COLOR
-    });
-    this.bars[action.b].attr({
-      fill: COMPARE_COLOR
-    });
-    setTimeout(function () {
-      that.bars[action.a].animate({
-        fill: BAR_COLOR
-      }, SWAP_SPEED);
-      that.bars[action.b].animate({
-        fill: BAR_COLOR
-      }, SWAP_SPEED);
-    }, SWAP_SPEED);
+    compareTwoValues(this.bars[action.a], this.bars[action.b]);
   }
-
-  setTimeout(function () {
-    that.playSortActions(sortActions);
-  }, SWAP_SPEED * 2);
 };
+
+function compareTwoValues(barA, barB) {
+  barA.attr({ fill: COMPARE_COLOR });
+  barB.attr({ fill: COMPARE_COLOR });
+  setTimeout(function () {
+    barA.animate({ fill: BAR_COLOR }, SWAP_SPEED);
+    barB.animate({ fill: BAR_COLOR }, SWAP_SPEED);
+  }, SWAP_SPEED);
+}
 
 function sort(array, algorithm, customCompare) {
   var sortActions = [];

@@ -27,9 +27,33 @@ function generateRandomArray() {
   return array;
 }
 
-function playAll() {
+function play() {
   sortPanes.forEach(function (pane) {
     pane.play();
+  });
+}
+
+function pause() {
+  sortPanes.forEach(function (pane) {
+    pane.pause();
+  });
+}
+
+function resume() {
+  sortPanes.forEach(function (pane) {
+    pane.resume();
+  });
+}
+
+function stepForward() {
+  sortPanes.forEach(function (pane) {
+    pane.stepForward();
+  });
+}
+
+function stepBack() {
+  sortPanes.forEach(function (pane) {
+    pane.stepBack();
   });
 }
 
@@ -60,7 +84,11 @@ function init() {
 
 module.exports = {
   init: init,
-  playAll: playAll,
+  play: play,
+  pause: pause,
+  resume: resume,
+  stepBack: stepBack,
+  stepForward: stepForward,
   shuffleArray: shuffleArray,
   sortInReverseToggled: sortInReverseToggled
 };
