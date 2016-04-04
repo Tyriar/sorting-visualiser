@@ -117,7 +117,7 @@ SortPane.prototype.restart = function () {
       that.performSort();
       that.isSorting = true;
       setTimeout(that.playSortActions.bind(that, false), SHUFFLE_SPEED);
-    }, SWAP_SPEED);
+    }, SWAP_SPEED * 2);
     return;
   }
   if (this.currentSortActionIndex !== 0) {
