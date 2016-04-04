@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/* global Snap */
+
 var SortAction = require('./sort-action');
 
 var BAR_WIDTH = 10;
@@ -17,7 +19,7 @@ var SHUFFLE_SPEED = 100;
 
 function SortPane(svgElement, algorithm, array) {
   this.algorithm = algorithm;
-  this.snap = Snap(svgElement);
+  this.snap = Snap(svgElement); // eslint-disable-line new-cap
   this.array = array.slice();
 
   this.sortInReverse = false;
@@ -33,7 +35,7 @@ SortPane.prototype.setArray = function (array) {
 };
 
 SortPane.prototype.performSort = function () {
-  var customCompare = undefined;
+  var customCompare;
   if (this.sortInReverse) {
     customCompare = function (a, b) {
       return b - a;
@@ -172,11 +174,11 @@ SortPane.prototype.playSortAction = function (action) {
 };
 
 function compareTwoValues(barA, barB) {
-  barA.attr({ fill: COMPARE_COLOR });
-  barB.attr({ fill: COMPARE_COLOR });
+  barA.attr({fill: COMPARE_COLOR});
+  barB.attr({fill: COMPARE_COLOR});
   setTimeout(function () {
-    barA.animate({ fill: BAR_COLOR }, SWAP_SPEED);
-    barB.animate({ fill: BAR_COLOR }, SWAP_SPEED);
+    barA.animate({fill: BAR_COLOR}, SWAP_SPEED);
+    barB.animate({fill: BAR_COLOR}, SWAP_SPEED);
   }, SWAP_SPEED);
 }
 

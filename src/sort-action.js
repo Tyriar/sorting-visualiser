@@ -14,10 +14,10 @@ SortAction.SWAP = 'swap';
 
 SortAction.prototype.isCompareAction = function () {
   return this.type === SortAction.COMPARE;
-}
+};
 
 SortAction.prototype.isSwapAction = function () {
   return this.type === SortAction.SWAP;
-}
+};
 
 module.exports = SortAction;

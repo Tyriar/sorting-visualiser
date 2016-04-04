@@ -3,7 +3,9 @@
   "version": "0.1.6",
   "description": "A library for visualising sorting algorithms.",
   "scripts": {
-    "serve": "webpack-dev-server --progress --colors"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "serve": "webpack-dev-server --progress --colors",
+    "test": "xo && nyc ava"
   },
   "repository": {
     "type": "git",
@@ -21,9 +23,16 @@
   },
   "homepage": "https://github.com/Tyriar/sorting-visualiser",
   "devDependencies": {
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "ava": "*",
+    "coveralls": "^2.11.4",
+    "nyc": "^3.2.2",
+    "xo": "*"
   },
   "dependencies": {
     "js-sorting": "^3.0.1"
+  },
+  "xo": {
+    "space": 2
   }
 }
