@@ -1,6 +1,6 @@
 {
   "name": "sorting-visualiser",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A library for visualising sorting algorithms.",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
