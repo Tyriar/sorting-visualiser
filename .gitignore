@@ -1,3 +1,6 @@
+.nyc_output
 bower_components
 dist
 node_modules
+
+npm-debug.log
