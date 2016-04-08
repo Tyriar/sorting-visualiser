@@ -14,11 +14,11 @@ function initEventListeners() {
   document.querySelector('#step-back').addEventListener('click', sortingVisualiser.stepBack);
   document.querySelector('#step-forward').addEventListener('click', sortingVisualiser.stepForward);
   document.querySelector('#shuffle-array').addEventListener('click', sortingVisualiser.shuffleArray);
-  document.querySelector('#sort-in-reverse').addEventListener('click', sortingVisualiser.sortInReverseToggled);
+  document.querySelector('#toggle-sort-direction').addEventListener('click', sortingVisualiser.toggleSortDirection);
 }
 
 function init() {
-  sortingVisualiser.init();
+  sortingVisualiser.init(document.querySelectorAll('.sorting-visualiser'));
   initEventListeners();
 }
 

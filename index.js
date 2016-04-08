@@ -64,7 +64,7 @@ function shuffleArray() {
   });
 }
 
-function sortInReverseToggled() {
+function toggleSortDirection() {
   sortPanes.forEach(function (pane) {
     pane.toggleSortDirection();
   });
@@ -79,6 +79,7 @@ function init(elements) {
     element.id = 'sorting-visualiser-' + algorithmName;
     sortPanes.push(new SortPane(element, algorithm, initialArray));
   }
+  return sortPanes;
 }
 
 module.exports = {
@@ -89,5 +90,5 @@ module.exports = {
   stepBack: stepBack,
   stepForward: stepForward,
   shuffleArray: shuffleArray,
-  sortInReverseToggled: sortInReverseToggled
+  toggleSortDirection: toggleSortDirection
 };
