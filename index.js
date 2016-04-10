@@ -40,6 +40,12 @@ function pause() {
   });
 }
 
+function resume() {
+  sortPanes.forEach(function (pane) {
+    pane.resume();
+  });
+}
+
 function restart() {
   sortPanes.forEach(function (pane) {
     pane.restart();
@@ -85,8 +91,9 @@ function handleVisibilityChange() {
     }
   } else {
     if (wasPlaying) {
-      play();
+      resume();
     }
+    wasPlaying = false;
   }
 }
 

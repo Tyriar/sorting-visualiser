@@ -24,6 +24,7 @@ function SortPane(svgElement, algorithm, array) {
 
   this.sortInReverse = false;
   this.isSorting = false;
+  this.isPausing = false;
 
   this.createBars();
   this.performSort();
@@ -77,6 +78,7 @@ SortPane.prototype.toggleSortDirection = function () {
 
 SortPane.prototype.pause = function () {
   this.isSorting = false;
+  this.isPausing = true;
 };
 
 SortPane.prototype.stepForward = function () {
@@ -104,6 +106,24 @@ SortPane.prototype.play = function () {
     return;
   }
   this.isSorting = true;
+  this.isPausing = false;
+  this.playSortActions(false);
+};
+
+SortPane.prototype.resume = function () {
+  if (this.isPausing) {
+    this.isPausing = false;
+    this.isSorting = true;
+  }
+  if (this.isSorting) {
+    return;
+  }
+  if (this.currentSortActionIndex === 0) {
+    // Resume, don't play from start
+    return;
+  }
+  this.isSorting = true;
+  this.isPausing = false;
   this.playSortActions(false);
 };
 
@@ -119,6 +139,7 @@ SortPane.prototype.restart = function () {
       }
       that.performSort();
       that.isSorting = true;
+      that.isPausing = false;
       setTimeout(that.playSortActions.bind(that, false), SHUFFLE_SPEED);
     }, SWAP_SPEED * 2);
     return;
@@ -128,6 +149,7 @@ SortPane.prototype.restart = function () {
   }
   this.performSort();
   this.isSorting = true;
+  this.isPausing = false;
   setTimeout(this.playSortActions.bind(this, false), SHUFFLE_SPEED);
 };
 
@@ -136,6 +158,7 @@ SortPane.prototype.onplayfinished = function () {
 };
 
 SortPane.prototype.playSortActions = function (stepOnlyOnce) {
+  this.isPausing = false;
   if (!this.isSorting) {
     // Playback was stopped
     return;
