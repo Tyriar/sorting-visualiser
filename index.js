@@ -9,6 +9,7 @@ var sortAlgorithms = require('./src/sort-algorithms');
 var ARRAY_SIZE = 20;
 
 var sortPanes = [];
+var wasPlaying = false;
 
 function generateRandomArray() {
   var array = [];
@@ -70,7 +71,26 @@ function toggleSortDirection() {
   });
 }
 
-function init(elements) {
+function isPlaying() {
+  return sortPanes.some(function (pane) {
+    return pane.isSorting;
+  });
+}
+
+function handleVisibilityChange() {
+  if (document.hidden) {
+    wasPlaying = isPlaying();
+    if (wasPlaying) {
+      pause();
+    }
+  } else {
+    if (wasPlaying) {
+      play();
+    }
+  }
+}
+
+function init(document, elements) {
   var initialArray = generateRandomArray();
   for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
@@ -79,6 +99,8 @@ function init(elements) {
     element.id = 'sorting-visualiser-' + algorithmName;
     sortPanes.push(new SortPane(element, algorithm, initialArray));
   }
+  document.addEventListener('visibilitychange', handleVisibilityChange, false);
+
   return sortPanes;
 }
 

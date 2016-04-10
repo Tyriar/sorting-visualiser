@@ -18,7 +18,7 @@ function initEventListeners() {
 }
 
 function init() {
-  sortingVisualiser.init(document.querySelectorAll('.sorting-visualiser'));
+  sortingVisualiser.init(document, document.querySelectorAll('.sorting-visualiser'));
   initEventListeners();
 }
 
