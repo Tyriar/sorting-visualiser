@@ -74,6 +74,9 @@ SortPane.prototype.createBars = function () {
 
 SortPane.prototype.toggleSortDirection = function () {
   this.sortInReverse = !this.sortInReverse;
+  if (this.currentSortActionIndex === 0) {
+    this.performSort();
+  }
 };
 
 SortPane.prototype.pause = function () {
