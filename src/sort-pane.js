@@ -55,6 +55,7 @@ SortPane.prototype.redrawArray = function () {
       y: BAR_MAX_HEIGHT - newHeight
     }, SHUFFLE_SPEED);
   }
+  this.currentSortActionIndex = 0;
 };
 
 SortPane.prototype.createBars = function () {
