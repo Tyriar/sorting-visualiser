@@ -86,7 +86,7 @@ SortPane.prototype.pause = function () {
 
 SortPane.prototype.stepForward = function () {
   if (this.isSorting) {
-    return;
+    this.pause();
   }
   this.isSorting = true;
   this.playSortActions(true);
@@ -95,7 +95,7 @@ SortPane.prototype.stepForward = function () {
 
 SortPane.prototype.stepBack = function () {
   if (this.isSorting) {
-    return;
+    this.pause();
   }
   if (this.currentSortActionIndex === 0) {
     // Cannot go back
