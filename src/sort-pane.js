@@ -176,7 +176,7 @@ SortPane.prototype.playSortActions = function (stepOnlyOnce) {
   if (!stepOnlyOnce) {
     setTimeout(function () {
       that.playSortActions();
-    }, SWAP_SPEED * 2);
+    }, SWAP_SPEED * 3);
   }
 };
 
@@ -204,9 +204,9 @@ function compareTwoValues(barA, barB) {
   barA.attr({fill: COMPARE_COLOR});
   barB.attr({fill: COMPARE_COLOR});
   setTimeout(function () {
-    barA.animate({fill: BAR_COLOR}, SWAP_SPEED);
-    barB.animate({fill: BAR_COLOR}, SWAP_SPEED);
-  }, SWAP_SPEED);
+    barA.attr({fill: BAR_COLOR});
+    barB.attr({fill: BAR_COLOR});
+  }, SWAP_SPEED * 2);
 }
 
 function sort(array, algorithm, customCompare) {
