@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/* global document */
+
 var SortPane = require('./src/sort-pane');
 var sortAlgorithms = require('./src/sort-algorithms');
 
