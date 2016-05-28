@@ -7,7 +7,7 @@
   <img src="example.png"/>
 </p>
 
-Visualise sorting algorithms with the help of [js-sorting](https://github.com/Tyriar/js-sorting). It works by attaching a bunch of observers to the critical parts of the sorting algorithm, such as swapping and comparing values.
+Visualise sorting algorithms with the help of [js-sorting](https://github.com/gwtw/js-sorting). It works by attaching a bunch of observers to the critical parts of the sorting algorithm, such as swapping and comparing values.
 
 [See it in action here](http://www.growingwiththeweb.com/projects/sorting-visualiser/).
 
