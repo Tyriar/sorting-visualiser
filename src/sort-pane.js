@@ -3,8 +3,7 @@
  */
 'use strict';
 
-/* global Snap */
-
+var Snap = require('imports-loader?this=>window,fix=>module.exports=0!snapsvg/dist/snap.svg.js');
 var SortAction = require('./sort-action');
 
 var BAR_WIDTH = 10;
