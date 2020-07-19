@@ -3,10 +3,11 @@
   "version": "0.2.0",
   "description": "A library for visualising sorting algorithms.",
   "scripts": {
+    "build": "webpack --progress --colors",
+    "watch": "webpack --progress --colors --watch",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "serve": "webpack-dev-server --progress --colors",
-    "test": "nyc ava",
-    "watch": "webpack --progress --colors --watch"
+    "test": "nyc ava"
   },
   "repository": {
     "type": "git",
