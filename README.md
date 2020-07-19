@@ -14,7 +14,6 @@ Visualise sorting algorithms with the help of [js-sorting](https://github.com/gw
 ## Dependencies
 
 ```
-bower install
 npm install
 ```
 
